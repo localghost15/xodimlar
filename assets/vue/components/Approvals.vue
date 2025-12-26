@@ -4,7 +4,7 @@
       <h1 class="text-2xl font-bold text-gray-800">{{ $t('nav.approvals') }}</h1>
       <div class="space-x-2">
         <button @click="fetchData" class="text-indigo-600 hover:text-indigo-800 text-sm">
-          <i class="fas fa-sync-alt"></i> {{ $t('absence.refresh') }}
+          <i class="fas fa-sync-alt"></i> {{ $t('approvals.refresh') }}
         </button>
       </div>
     </div>
@@ -22,10 +22,13 @@
     </div>
 
     <!-- ERROR -->
-    <div v-if="error" class="bg-red-50 text-red-600 p-4 rounded mb-4">{{ error }}</div>
+    <div v-if="error" class="bg-red-50 text-red-600 p-4 rounded mb-4">
+        {{ $t('approvals.error_load') }}
+        <span v-if="errorMessage" class="block text-xs mt-1 text-red-500 font-mono">{{ errorMessage }}</span>
+    </div>
 
     <!-- LOADING -->
-    <div v-if="loading" class="text-center py-10 text-gray-400">Loading...</div>
+    <div v-if="loading" class="text-center py-10 text-gray-400">{{ $t('approvals.loading') }}</div>
 
     <!-- LIST -->
     <div v-else class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
@@ -33,15 +36,15 @@
         <table class="w-full text-left text-sm">
             <thead class="bg-gray-50 text-gray-500 font-medium border-b">
                 <tr>
-                    <th class="px-6 py-4">ID</th>
-                    <th class="px-6 py-4">Сотрудник</th>
-                    <th class="px-6 py-4">Детали</th>
-                    <th class="px-6 py-4 text-right">Действия</th>
+                    <th class="px-6 py-4">{{ $t('approvals.table_id') }}</th>
+                    <th class="px-6 py-4">{{ $t('approvals.table_employee') }}</th>
+                    <th class="px-6 py-4">{{ $t('approvals.table_details') }}</th>
+                    <th class="px-6 py-4 text-right">{{ $t('approvals.table_actions') }}</th>
                 </tr>
             </thead>
             <tbody class="divide-y divide-gray-100">
                 <tr v-if="items.length === 0">
-                    <td colspan="4" class="px-6 py-10 text-center text-gray-400">Нет заявок на согласование</td>
+                    <td colspan="4" class="px-6 py-10 text-center text-gray-400">{{ $t('approvals.no_data') }}</td>
                 </tr>
                 <tr v-for="item in items" :key="item.id" class="hover:bg-gray-50">
                     <td class="px-6 py-4 text-gray-500">#{{ item.id }}</td>
@@ -53,7 +56,7 @@
                         <!-- Content depends on type -->
                         <div v-if="role === 'ROLE_HR'">
                             <p class="font-medium text-gray-700">{{ item.date }}</p>
-                            <p class="text-xs text-gray-500">{{ item.type === 'full_day' ? 'Весь день' : item.type }}</p>
+                            <p class="text-xs text-gray-500">{{ item.type === 'full_day' ? $t('absence.type_full_day') : $t('absence.type_hours') }}</p>
                             <p class="text-sm italic mt-1 text-gray-600">"{{ item.reason }}"</p>
                         </div>
                         <div v-else>
@@ -64,10 +67,10 @@
                     </td>
                     <td class="px-6 py-4 text-right space-x-2">
                         <button @click="approve(item.id)" class="bg-green-100 text-green-700 hover:bg-green-200 px-3 py-1 rounded transition text-xs font-bold">
-                           <i class="fas fa-check mr-1"></i> Approve
+                           <i class="fas fa-check mr-1"></i> {{ $t('approvals.btn_approve') }}
                         </button>
                         <button @click="reject(item.id)" class="bg-red-50 text-red-600 hover:bg-red-100 px-3 py-1 rounded transition text-xs">
-                           Reject
+                           {{ $t('approvals.btn_reject') }}
                         </button>
                     </td>
                 </tr>
@@ -81,17 +84,21 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue';
 import axios from 'axios';
+import { useI18n } from 'vue-i18n';
 import { useAuthStore } from '../stores/auth';
 
+const { t } = useI18n();
 const authStore = useAuthStore();
 const role = computed(() => authStore.role);
 const items = ref([]);
 const loading = ref(false);
-const error = ref(null);
+const error = ref(false);
+const errorMessage = ref('');
 
 const fetchData = async () => {
     loading.value = true;
-    error.value = null;
+    error.value = false;
+    errorMessage.value = '';
     items.value = [];
     try {
         let url = '';
@@ -105,7 +112,8 @@ const fetchData = async () => {
         const res = await axios.get(url);
         items.value = res.data;
     } catch (e) {
-        error.value = "Ошибка загрузки данных";
+        error.value = true;
+        errorMessage.value = e.response?.data?.error || e.message;
         console.error(e);
     } finally {
         loading.value = false;
@@ -113,7 +121,7 @@ const fetchData = async () => {
 };
 
 const approve = async (id) => {
-    if(!confirm('Подтвердить заявку?')) return;
+    if(!confirm(t('approvals.confirm_approve'))) return;
     try {
         let url = '';
         if(role.value === 'ROLE_HR') {
@@ -129,7 +137,7 @@ const approve = async (id) => {
 };
 
 const reject = async (id) => {
-    if(!confirm('Отклонить заявку?')) return;
+    if(!confirm(t('approvals.confirm_reject'))) return;
     try {
          let url = '';
          if(role.value === 'ROLE_HR') {

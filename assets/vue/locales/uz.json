@@ -68,6 +68,21 @@
         "status_pending": "Kutilmoqda",
         "quick_actions": "Tezkor harakatlar"
     },
+    "approvals": {
+        "title": "Tasdiqlashlar",
+        "refresh": "Yangilash",
+        "table_id": "ID",
+        "table_employee": "Xodim",
+        "table_details": "Tafsilotlar",
+        "table_actions": "Harakatlar",
+        "no_data": "Tasdiqlash uchun arizalar yo'q",
+        "btn_approve": "Tasdiqlash",
+        "btn_reject": "Rad etish",
+        "confirm_approve": "Arizani tasdiqlaysizmi?",
+        "confirm_reject": "Arizani rad etasizmi?",
+        "loading": "Yuklanmoqda...",
+        "error_load": "Ma'lumotlarni yuklashda xatolik"
+    },
     "common": {
         "submit": "Yuborish",
         "sending": "Yuborilmoqda..."

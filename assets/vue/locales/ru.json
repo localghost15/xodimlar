@@ -68,6 +68,21 @@
     "status_pending": "Ожидает",
     "quick_actions": "Быстрые действия"
   },
+  "approvals": {
+    "title": "Согласования",
+    "refresh": "Обновить",
+    "table_id": "ID",
+    "table_employee": "Сотрудник",
+    "table_details": "Детали",
+    "table_actions": "Действия",
+    "no_data": "Нет заявок на согласование",
+    "btn_approve": "Одобрить",
+    "btn_reject": "Отклонить",
+    "confirm_approve": "Подтвердить заявку?",
+    "confirm_reject": "Отклонить заявку?",
+    "loading": "Загрузка...",
+    "error_load": "Ошибка загрузки данных"
+  },
   "common": {
     "submit": "Отправить",
     "sending": "Отправка..."
