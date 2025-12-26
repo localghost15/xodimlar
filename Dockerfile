@@ -7,7 +7,12 @@ RUN apt-get update && apt-get install -y \
     libzip-dev \
     libicu-dev \
     libonig-dev \
+    gnupg \
     && docker-php-ext-install pdo pdo_mysql zip intl opcache
+
+# Install Node.js
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
+    && apt-get install -y nodejs
 
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
@@ -18,5 +23,5 @@ WORKDIR /var/www
 # Copy existing code
 COPY . .
 
-# Install PHP dependencies (if composer.json exists)
-# RUN composer install --no-scripts --no-interaction # Commented out to run manually or via entrypoint
+# Permissions
+RUN chown -R www-data:www-data /var/www

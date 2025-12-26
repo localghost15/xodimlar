@@ -23,10 +23,10 @@
     "reason_label": "Причина",
     "reason_placeholder": "Опишите причину отсутствия...",
     "reason_hint": "Минимум 20 символов",
-    "success_msg": "Заявка успешно создана!"
+    "success_msg": "Ariza muvaffaqiyatli yaratildi!"
   },
   "nav": {
-    "dashboard": "Главная",
+    "dashboard": "Bosh sahifa",
     "absence_create": "Подать заявку (Отсутствие)",
     "purchase_create": "Заявка на закупку",
     "approvals": "Согласования",
@@ -37,6 +37,17 @@
     "no_absences": "Все на месте",
     "purchases_title": "Закупки на подпись",
     "no_purchases": "Нет активных заявок",
+    "purchases_title": "Закупки на подпись",
+    "no_purchases": "Нет активных заявок",
     "discipline_title": "Топ прогулов (часы)"
+  },
+  "purchase": {
+    "title": "Новая заявка на закупку",
+    "item_name": "Наименование товара",
+    "category": "Категория",
+    "price": "Стоимость",
+    "description": "Обоснование / Детали",
+    "link": "Ссылка на товар",
+    "success_msg": "Заявка отправлена на согласование!"
   }
 }

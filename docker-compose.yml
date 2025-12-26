@@ -1,3 +1,5 @@
+version: '3.8'
+
 services:
   app:
     build: .
@@ -5,9 +7,9 @@ services:
     volumes:
       - .:/var/www
     depends_on:
-      - db
+      - database
     environment:
-      DATABASE_URL: "mysql://xodimlar:secret@db:3306/xodimlar?serverVersion=8.0&charset=utf8mb4"
+      DATABASE_URL: "mysql://xodimlar:secret@database:3306/xodimlar?serverVersion=8.0&charset=utf8mb4"
     networks:
       - xodimlar_net
 
@@ -24,16 +26,17 @@ services:
     networks:
       - xodimlar_net
 
-  db:
+  database:
     image: mysql:8.0
     container_name: xodimlar_db
+    command: --default-authentication-plugin=mysql_native_password
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: xodimlar
       MYSQL_USER: xodimlar
       MYSQL_PASSWORD: secret
     ports:
-      - "33060:3306"
+      - "33061:3306"
     volumes:
       - db_data:/var/lib/mysql
     networks:
@@ -41,6 +44,7 @@ services:
 
 volumes:
   db_data:
+
 
 networks:
   xodimlar_net:

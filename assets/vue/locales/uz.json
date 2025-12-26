@@ -24,5 +24,19 @@
         "reason_placeholder": "Sababini yozing...",
         "reason_hint": "Kamida 20 ta belgi",
         "success_msg": "Ariza muvaffaqiyatli yaratildi!"
+    },
+    "nav": {
+        "dashboard": "Bosh sahifa",
+        "absence_create": "Ariza yuborish (Kelmaslik)",
+        "purchase_create": "Xaridga ariza",
+        "approvals": "Tasdiqlash",
+        "logout": "Chiqish"
+    },
+    "dashboard": {
+        "absent_title": "Bugun ofisda yo'q",
+        "no_absences": "Hamma joyida",
+        "purchases_title": "Imzo uchun xaridlar",
+        "no_purchases": "Arizalar yo'q",
+        "discipline_title": "Top qoldirilgan soatlar"
     }
 }

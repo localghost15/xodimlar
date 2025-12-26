@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Xodimlar System</title>
+    <!-- Tailwind CSS (via CDN for simplicity if build fails, else use local) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- If we had a build system outputting manifest.json, we'd use asset() helper. 
+         For this environment, we will try to load the module directly if possible 
+         OR rely on the user running npm run build and we serve the dist.
+         
+         Since we are using Vite, we need to handle the module loading.
+    -->
+    <script type="module" crossorigin src="/build/assets/index.js"></script>
+    <link rel="stylesheet" href="/build/assets/index.css">
+</head>
+<body class="bg-gray-100">
+    <div id="app"></div>
+</body>
+</html>

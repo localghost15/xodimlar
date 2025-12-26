@@ -107,6 +107,8 @@ class PurchaseController extends AbstractController
             return $this->json(['error' => 'Cannot approve in current status: ' . $currentStatus], 400);
         }
 
+        if ($newStatus) {
+            $purchase->setStatus($newStatus);
             $this->entityManager->flush();
             return $this->json(['success' => true, 'new_status' => $newStatus]);
         }
@@ -119,14 +121,14 @@ class PurchaseController extends AbstractController
     {
         $user = $this->getUser();
         if (!$user instanceof User || !in_array('ROLE_CEO', $user->getRoles())) {
-             return $this->json(['error' => 'Access denied'], 403);
+            return $this->json(['error' => 'Access denied'], 403);
         }
 
         $data = json_decode($request->getContent(), true);
         $ids = $data['ids'] ?? [];
 
         if (empty($ids)) {
-             return $this->json(['error' => 'No IDs provided'], 400);
+            return $this->json(['error' => 'No IDs provided'], 400);
         }
 
         $repo = $this->entityManager->getRepository(PurchaseRequest::class);

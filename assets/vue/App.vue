@@ -28,6 +28,10 @@
                <AbsenceRequestForm />
             </template>
 
+            <template v-if="currentHash === '#/purchase/create'">
+               <PurchaseRequestForm />
+            </template>
+
             <template v-if="currentHash === '#/ceo/dashboard'">
                <DashboardCEO />
             </template>
@@ -47,6 +51,7 @@ import { useAuthStore } from './stores/auth';
 import Login from './components/Login.vue';
 import Sidebar from './components/Sidebar.vue';
 import AbsenceRequestForm from './components/AbsenceRequestForm.vue';
+import PurchaseRequestForm from './components/PurchaseRequestForm.vue';
 import DashboardCEO from './components/DashboardCEO.vue';
 
 const authStore = useAuthStore();
