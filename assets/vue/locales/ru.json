@@ -62,7 +62,11 @@
     "purchases_title": "Закупки на согласовании",
     "approve_selected": "Одобрить",
     "no_purchases": "Нет заявок на согласование",
-    "discipline_top": "Топ нарушений дисциплины"
+    "discipline_top": "Топ нарушений дисциплины",
+    "welcome": "Добро пожаловать",
+    "overview_subtitle": "Обзор вашей активности",
+    "status_pending": "Ожидает",
+    "quick_actions": "Быстрые действия"
   },
   "common": {
     "submit": "Отправить",

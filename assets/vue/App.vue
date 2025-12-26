@@ -17,11 +17,8 @@
          <!-- If logged in, show content based on hash -->
          <div v-else class="container mx-auto">
             <template v-if="currentHash === '#/dashboard'">
-               <!-- Simple Dashboard Placeholder -->
-               <div class="p-8">
-                 <h2 class="text-2xl font-bold mb-4">Welcome, {{ authStore.user.full_name }}</h2>
-                 <p>Select a module from the sidebar.</p>
-               </div>
+               <DashboardCEO v-if="authStore.role === 'ROLE_CEO'" />
+               <DashboardCommon v-else />
             </template>
 
             <template v-if="currentHash === '#/absence/create'">
@@ -52,7 +49,7 @@ import Login from './components/Login.vue';
 import Sidebar from './components/Sidebar.vue';
 import AbsenceRequestForm from './components/AbsenceRequestForm.vue';
 import PurchaseRequestForm from './components/PurchaseRequestForm.vue';
-import DashboardCEO from './components/DashboardCEO.vue';
+import DashboardCommon from './components/DashboardCommon.vue';
 
 const authStore = useAuthStore();
 const currentHash = ref(window.location.hash || '#/');
