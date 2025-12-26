@@ -23,6 +23,9 @@ class PurchaseRequest
     #[ORM\Column(length: 100)]
     private ?string $category = null;
 
+    #[ORM\Column(length: 50, options: ['default' => 'asset'])] // asset or consumable
+    private ?string $type = 'asset';
+
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $description = null;
 
@@ -85,6 +88,17 @@ class PurchaseRequest
     public function setCategory(string $category): static
     {
         $this->category = $category;
+        return $this;
+    }
+
+    public function getType(): string
+    {
+        return $this->type;
+    }
+
+    public function setType(string $type): static
+    {
+        $this->type = $type;
         return $this;
     }
 

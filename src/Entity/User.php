@@ -34,12 +34,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?string $password = null;
 
-    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
-    #[ORM\JoinColumn(nullable: true)]
-    private ?Department $department = null; // Assuming Dept entity or just ID? Plan said ID/Entity. Let's use Entity for ORM best practice.
+    // Department mapping handled by $departmentRel below
     // Wait, plan said "User: department_id". I will map it as ManyToOne if departments are shared.
     // Plan: "department_id (FK -> department.id)". So User M:1 Department.
-    
+
     // Changing to ManyToOne
     #[ORM\ManyToOne(targetEntity: Department::class)]
     #[ORM\JoinColumn(name: 'department_id', referencedColumnName: 'id', nullable: true)]
@@ -56,7 +54,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $lang = 'ru';
 
     // Getters and Setters...
-    
+
     public function getId(): ?int
     {
         return $this->id;

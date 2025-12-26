@@ -135,4 +135,31 @@ class AbsenceController extends AbstractController
             'id' => $absence->getId()
         ], Response::HTTP_CREATED);
     }
+
+    #[Route('/my-history', name: 'api_absence_history', methods: ['GET'])]
+    public function history(): JsonResponse
+    {
+        $user = $this->getUser();
+        if (!$user instanceof User) {
+            return $this->json(['error' => 'Unauthorized'], Response::HTTP_UNAUTHORIZED);
+        }
+
+        $repo = $this->entityManager->getRepository(AbsenceRequest::class);
+        // Find by user, order by date DESC
+        $absences = $repo->findBy(['user' => $user], ['date' => 'DESC']);
+
+        $data = [];
+        foreach ($absences as $abs) {
+            $data[] = [
+                'id' => $abs->getId(),
+                'date' => $abs->getDate()->format('Y-m-d'),
+                'type' => $abs->getType(),
+                'reason' => $abs->getReason(),
+                'status' => 'pending', // TODO: Add status field to entity if missing, assuming pending for now
+                'calculated_hours' => $abs->getCalculatedHours(),
+            ];
+        }
+
+        return $this->json($data);
+    }
 }

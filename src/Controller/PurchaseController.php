@@ -32,6 +32,7 @@ class PurchaseController extends AbstractController
 
         $title = $data['title'] ?? null;
         $category = $data['category'] ?? null;
+        $type = $data['type'] ?? 'asset';
         $price = $data['price'] ?? null;
         $description = $data['description'] ?? '';
         $link = $data['link'] ?? '';
@@ -43,7 +44,9 @@ class PurchaseController extends AbstractController
         $purchase = new PurchaseRequest();
         $purchase->setUser($user);
         $purchase->setTitle($title);
+        $purchase->setTitle($title);
         $purchase->setCategory($category);
+        $purchase->setType($type);
         $purchase->setPrice($price);
         $purchase->setDescription($description);
         $purchase->setLink($link);
@@ -150,6 +153,32 @@ class PurchaseController extends AbstractController
             'approved_count' => $count,
             'message' => "Approved $count requests"
         ]);
+    }
+    #[Route('/my-history', name: 'api_purchase_history', methods: ['GET'])]
+    public function history(): JsonResponse
+    {
+        $user = $this->getUser();
+        if (!$user instanceof User) {
+            return $this->json(['error' => 'Unauthorized'], Response::HTTP_UNAUTHORIZED);
+        }
+
+        $repo = $this->entityManager->getRepository(PurchaseRequest::class);
+        $requests = $repo->findBy(['user' => $user], ['id' => 'DESC']);
+
+        $data = [];
+        foreach ($requests as $req) {
+            $data[] = [
+                'id' => $req->getId(),
+                'title' => $req->getTitle(),
+                'category' => $req->getCategory(),
+                'type' => $req->getType(),
+                'price' => $req->getPrice(),
+                'status' => $req->getStatus(),
+                'created_at' => 'Today', // TODO: Add createdAt field to entity
+            ];
+        }
+
+        return $this->json($data);
     }
 }
 

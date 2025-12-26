@@ -7,9 +7,9 @@ services:
     volumes:
       - .:/var/www
     depends_on:
-      - database
+      - mysql_db
     environment:
-      DATABASE_URL: "mysql://xodimlar:secret@database:3306/xodimlar?serverVersion=8.0&charset=utf8mb4"
+      DATABASE_URL: "mysql://xodimlar:secret@mysql_db:3306/xodimlar?serverVersion=8.0&charset=utf8mb4"
     networks:
       - xodimlar_net
 
@@ -26,7 +26,7 @@ services:
     networks:
       - xodimlar_net
 
-  database:
+  mysql_db:
     image: mysql:8.0
     container_name: xodimlar_db
     command: --default-authentication-plugin=mysql_native_password

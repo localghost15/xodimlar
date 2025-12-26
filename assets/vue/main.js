@@ -8,7 +8,7 @@ import './index.css'
 
 const i18n = createI18n({
     legacy: false,
-    locale: 'ru',
+    locale: localStorage.getItem('user_locale') || 'ru',
     messages: {
         ru,
         uz

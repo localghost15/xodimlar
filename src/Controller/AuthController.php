@@ -34,15 +34,22 @@ class AuthController extends AbstractController
         // Simple sanitization matching fixture format 998...
         $cleanPhone = preg_replace('/[^\d]/', '', $phone);
 
+        // DEBUG LOGGING
+        error_log("Login attempt: Phone=$phone (Clean=$cleanPhone)");
+
         $user = $userRepository->findOneBy(['phone' => $cleanPhone]);
 
         if (!$user) {
+            error_log("User not found for phone: $cleanPhone");
             return $this->json([
                 'error' => 'Invalid credentials'
             ], Response::HTTP_UNAUTHORIZED);
         }
 
+        error_log("User found: " . $user->getId());
+
         if (!$passwordHasher->isPasswordValid($user, $password)) {
+            error_log("Password invalid for user: " . $user->getId());
             return $this->json([
                 'error' => 'Invalid credentials'
             ], Response::HTTP_UNAUTHORIZED);

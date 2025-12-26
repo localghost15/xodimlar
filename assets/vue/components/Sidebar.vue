@@ -16,7 +16,8 @@
       </a>
 
       <!-- Absence Module -->
-      <a href="#/absence/create" class="block px-4 py-3 rounded-lg hover:bg-gray-800 transition flex items-center space-x-3 text-gray-300 hover:text-white" :class="{'bg-indigo-900': currentHash === '#/absence/create'}">
+      <!-- Absence Module -->
+      <a v-if="role !== 'ROLE_CEO'" href="#/absence/create" class="block px-4 py-3 rounded-lg hover:bg-gray-800 transition flex items-center space-x-3 text-gray-300 hover:text-white" :class="{'bg-indigo-900': currentHash === '#/absence/create'}">
          <i class="fas fa-calendar-minus w-5"></i>
          <span>{{ $t('nav.absence_create') }}</span>
       </a>
@@ -29,7 +30,7 @@
 
       <!-- CEO/Head Specific -->
       <div v-if="role === 'ROLE_CEO' || role === 'ROLE_DEPT_HEAD'" class="pt-4 pb-2">
-        <p class="px-4 text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Management</p>
+        <p class="px-4 text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">{{ $t('nav.management') }}</p>
         <a v-if="role === 'ROLE_CEO'" href="#/ceo/dashboard" class="block px-4 py-3 rounded-lg hover:bg-gray-800 transition flex items-center space-x-3 text-yellow-500">
            <i class="fas fa-chart-line w-5"></i>
            <span>CEO Dashboard</span>
@@ -41,6 +42,27 @@
       </div>
 
     </nav>
+
+    <!-- Language Switcher -->
+    <div class="px-6 py-2 border-t border-gray-800">
+      <div class="flex items-center space-x-2 text-sm">
+        <button 
+          @click="changeLang('ru')" 
+          :class="locale === 'ru' ? 'text-white font-bold' : 'text-gray-500 hover:text-gray-300'"
+          class="transition-colors"
+        >
+          RU
+        </button>
+        <span class="text-gray-600">|</span>
+        <button 
+          @click="changeLang('uz')" 
+          :class="locale === 'uz' ? 'text-white font-bold' : 'text-gray-500 hover:text-gray-300'"
+          class="transition-colors"
+        >
+          UZ
+        </button>
+      </div>
+    </div>
 
     <div class="p-4 border-t border-gray-800">
       <div class="flex items-center space-x-3 mb-4">
@@ -63,9 +85,16 @@
 <script setup>
 import { computed } from 'vue';
 import { useAuthStore } from '../stores/auth';
+import { useI18n } from 'vue-i18n';
 
+const { locale } = useI18n();
 const authStore = useAuthStore();
 const role = computed(() => authStore.role);
+
+const changeLang = (lang) => {
+  locale.value = lang;
+  localStorage.setItem('user_locale', lang);
+};
 const userName = computed(() => authStore.user?.full_name || 'User');
 const userInitials = computed(() => userName.value.split(' ').map(n => n[0]).join('').substring(0,2));
 

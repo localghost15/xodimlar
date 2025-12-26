@@ -1,42 +1,79 @@
 {
     "login": {
-        "subtitle": "Korporativ boshqaruv tizimi",
+        "subtitle": "Tizimga kirish",
         "phone_label": "Telefon raqami",
         "password_label": "Parol",
         "submit_btn": "Kirish",
         "loading": "Kirish...",
-        "error_phone": "Telefon raqami noto'g'ri formatda"
+        "error_phone": "To'g'ri telefon raqamini kiriting"
+    },
+    "nav": {
+        "dashboard": "Bosh sahifa",
+        "absence_create": "Javob so'rash",
+        "purchase_create": "Xarid so'rovi",
+        "approvals": "Tasdiqlashlar",
+        "logout": "Chiqish",
+        "management": "Boshqaruv"
+    },
+    "absence": {
+        "title": "Javob so'rash arizasi",
+        "date_label": "Sana",
+        "type_label": "Turi",
+        "type_full_day": "To'liq kun",
+        "type_hours": "Bir necha soat",
+        "time_start": "Boshlanish",
+        "time_end": "Tugash",
+        "step_info": "Yo'q bo'lish vaqtini ko'rsating",
+        "reason_label": "Sabab",
+        "reason_placeholder": "Sababni batafsil yozing...",
+        "reason_hint": "Kamida 20 ta belgi",
+        "success_msg": "Ariza muvaffaqiyatli yuborildi!",
+        "history_title": "Mening tarix",
+        "refresh": "Yangilash",
+        "table_date": "Sana",
+        "table_type": "Turi",
+        "table_reason": "Sabab",
+        "table_hours": "Soat",
+        "table_status": "Holat",
+        "no_records": "Yozuvlar yo'q"
+    },
+    "purchase": {
+        "title": "Yangi xarid so'rovi",
+        "item_name": "Mahsulot nomi",
+        "category": "Kategoriya",
+        "price": "Narx (UZS)",
+        "description": "Tavsif / Asoslash",
+        "link": "Mahsulot havolasi (agar mavjud bo'lsa)",
+        "success_msg": "Xarid so'rovi yaratildi!",
+        "history_title": "Mening so'rovlarim",
+        "table_title": "Nomi",
+        "table_type": "Turi",
+        "table_price": "Narx",
+        "table_status": "Holat",
+        "type_label": "Xarid turi",
+        "type_asset": "Asosiy vositalar",
+        "type_consumable": "Sarf materiallari",
+        "hint_asset": "Qaytariladigan mulk (texnika, mebel)",
+        "hint_consumable": "Qaytarilmaydigan (qog'oz, kartridj, suv)"
+    },
+    "dashboard": {
+        "absent_title": "Bugun yo'qlar",
+        "no_absences": "Hamma joyida",
+        "purchases_title": "Tasdiqlash kutayotgan xaridlar",
+        "approve_selected": "Tasdiqlash",
+        "no_purchases": "Tasdiqlash uchun arizalar yo'q",
+        "discipline_top": "Intizom buzilishlari reytingi"
     },
     "common": {
         "submit": "Yuborish",
         "sending": "Yuborilmoqda..."
     },
-    "absence": {
-        "title": "Ishga kelmaslik haqida ariza",
-        "date_label": "Sana",
-        "type_label": "Turi",
-        "type_full_day": "To'liq kun",
-        "type_hours": "Bir necha soat",
-        "time_start": "Dan",
-        "time_end": "Gacha",
-        "step_info": "Qadam 30 daqiqa",
-        "reason_label": "Sabab",
-        "reason_placeholder": "Sababini yozing...",
-        "reason_hint": "Kamida 20 ta belgi",
-        "success_msg": "Ariza muvaffaqiyatli yaratildi!"
-    },
-    "nav": {
-        "dashboard": "Bosh sahifa",
-        "absence_create": "Ariza yuborish (Kelmaslik)",
-        "purchase_create": "Xaridga ariza",
-        "approvals": "Tasdiqlash",
-        "logout": "Chiqish"
-    },
-    "dashboard": {
-        "absent_title": "Bugun ofisda yo'q",
-        "no_absences": "Hamma joyida",
-        "purchases_title": "Imzo uchun xaridlar",
-        "no_purchases": "Arizalar yo'q",
-        "discipline_title": "Top qoldirilgan soatlar"
+    "categories": {
+        "office_equip": "Ofis texnikasi",
+        "furniture": "Mebel",
+        "stationery": "Kantselyariya",
+        "software": "Dasturiy ta'minot",
+        "household": "Xo'jalik mollari",
+        "other": "Boshqa"
     }
 }
