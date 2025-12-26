@@ -19,7 +19,11 @@ security:
             lazy: true
             provider: app_user_provider
             
-            # Configuring standard login check for internal auth
+            # Enable json_login so we have an authenticator to use
+            json_login:
+                check_path: api_login # We will handle logic in controller but having this enables the authenticator system
+                username_path: phone
+                password_path: password
             # The actual API authentication will be handled by AuthController manually for now
             # as responding with JSON and specific roles is requested.
             

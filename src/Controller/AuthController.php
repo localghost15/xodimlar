@@ -17,7 +17,8 @@ class AuthController extends AbstractController
     public function login(
         Request $request,
         UserRepository $userRepository,
-        UserPasswordHasherInterface $passwordHasher
+        UserPasswordHasherInterface $passwordHasher,
+        \Symfony\Bundle\SecurityBundle\Security $security
     ): JsonResponse {
         $data = json_decode($request->getContent(), true);
 
