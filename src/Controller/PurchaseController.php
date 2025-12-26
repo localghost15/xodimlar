@@ -16,7 +16,8 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 class PurchaseController extends AbstractController
 {
     public function __construct(
-        private EntityManagerInterface $entityManager
+        private EntityManagerInterface $entityManager,
+        private \App\Service\AssetService $assetService
     ) {
     }
 
@@ -101,8 +102,19 @@ class PurchaseController extends AbstractController
         // 3. CEO Final Approval 'budget_confirmed' -> 'ceo_approved'
         elseif ($currentStatus === 'budget_confirmed') {
             if (in_array('ROLE_CEO', $roles)) {
-                $newStatus = 'ceo_approved';
-                $purchase->setCeoApprovedAt(new \DateTime());
+
+                if ($purchase->getType() === 'asset') {
+                    // Create Asset automatically
+                    $inv = 'INV-' . date('Y') . '-' . mt_rand(1000, 9999);
+                    $sn = 'SN-' . strtoupper(substr(md5(uniqid()), 0, 8));
+                    $this->assetService->createAssetFromPurchase($purchase, $user, $inv, $sn);
+                    // status is set to 'asset_created' inside service
+                    $newStatus = 'asset_created';
+                } else {
+                    $newStatus = 'ceo_approved';
+                    $purchase->setCeoApprovedAt(new \DateTime());
+                }
+
             } else {
                 return $this->json(['error' => 'Access denied. Waiting for CEO.'], 403);
             }
@@ -140,8 +152,16 @@ class PurchaseController extends AbstractController
         foreach ($ids as $id) {
             $purchase = $repo->find($id);
             if ($purchase && $purchase->getStatus() === 'budget_confirmed') {
-                $purchase->setStatus('ceo_approved');
-                $purchase->setCeoApprovedAt(new \DateTime());
+
+                if ($purchase->getType() === 'asset') {
+                    $inv = 'INV-' . date('Y') . '-' . mt_rand(1000, 9999);
+                    $sn = 'SN-' . strtoupper(substr(md5(uniqid()), 0, 8));
+                    $this->assetService->createAssetFromPurchase($purchase, $user, $inv, $sn);
+                } else {
+                    $purchase->setStatus('ceo_approved');
+                    $purchase->setCeoApprovedAt(new \DateTime());
+                }
+
                 $count++;
             }
         }
@@ -175,6 +195,52 @@ class PurchaseController extends AbstractController
                 'price' => $req->getPrice(),
                 'status' => $req->getStatus(),
                 'created_at' => 'Today', // TODO: Add createdAt field to entity
+            ];
+        }
+
+        return $this->json($data);
+    }
+
+    #[Route('/pending-approvals', name: 'api_purchase_pending', methods: ['GET'])]
+    public function pendingApprovals(): JsonResponse
+    {
+        $user = $this->getUser();
+        if (!$user instanceof User) {
+            return $this->json(['error' => 'Unauthorized'], 401);
+        }
+
+        $roles = $user->getRoles();
+        $statusCriteria = null;
+
+        if (in_array('ROLE_DEPT_HEAD', $roles)) {
+            $statusCriteria = 'new';
+        } elseif (in_array('ROLE_ACCOUNTANT', $roles)) {
+            $statusCriteria = 'head_approved';
+        } elseif (in_array('ROLE_CEO', $roles)) {
+            // CEO usually sees 'budget_confirmed' but via dashboard stats normally. 
+            // Also can see 'new' or 'head_approved' if he wants to skip steps? 
+            // For now let's focus on Head/Accountant list.
+            // If CEO calls this, maybe show everything? 
+            // Let's stick to showing him budget_confirmed items here too as a fallback list
+            $statusCriteria = 'budget_confirmed';
+        } else {
+            return $this->json(['error' => 'Access denied'], 403);
+        }
+
+        $repo = $this->entityManager->getRepository(PurchaseRequest::class);
+        $requests = $repo->findBy(['status' => $statusCriteria], ['id' => 'ASC']);
+
+        $data = [];
+        foreach ($requests as $req) {
+            $data[] = [
+                'id' => $req->getId(),
+                'title' => $req->getTitle(),
+                'user_name' => $req->getUser()->getFullName(),
+                'price' => $req->getPrice(),
+                'category' => $req->getCategory(),
+                'status' => $req->getStatus(),
+                'description' => $req->getDescription(),
+                'type' => $req->getType(),
             ];
         }
 

@@ -33,6 +33,10 @@
                <DashboardCEO />
             </template>
 
+            <template v-if="currentHash === '#/approvals'">
+               <Approvals />
+            </template>
+
             <!-- Add other views here -->
          </div>
       </div>
@@ -49,7 +53,9 @@ import Login from './components/Login.vue';
 import Sidebar from './components/Sidebar.vue';
 import AbsenceRequestForm from './components/AbsenceRequestForm.vue';
 import PurchaseRequestForm from './components/PurchaseRequestForm.vue';
+import DashboardCEO from './components/DashboardCEO.vue';
 import DashboardCommon from './components/DashboardCommon.vue';
+import Approvals from './components/Approvals.vue';
 
 const authStore = useAuthStore();
 const currentHash = ref(window.location.hash || '#/');

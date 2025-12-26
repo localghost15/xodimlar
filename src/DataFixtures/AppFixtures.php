@@ -58,6 +58,23 @@ class AppFixtures extends Fixture
         $emp->setLang('uz');
         $manager->persist($emp);
 
+        // 4. Dept Head
+        $head = new User();
+        $head->setPhone('998905554433');
+        $head->setFullName('Department Head');
+        $head->setRoles(['ROLE_DEPT_HEAD']);
+        $head->setPassword($this->userPasswordHasher->hashPassword($head, 'password123'));
+        $head->setDepartment('IT Department');
+        $manager->persist($head);
+
+        // 5. Accountant
+        $acc = new User();
+        $acc->setPhone('998909998877');
+        $acc->setFullName('Accountant User');
+        $acc->setRoles(['ROLE_ACCOUNTANT']);
+        $acc->setPassword($this->userPasswordHasher->hashPassword($acc, 'password123'));
+        $manager->persist($acc);
+
         $manager->flush();
     }
 }

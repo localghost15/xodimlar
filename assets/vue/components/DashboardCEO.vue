@@ -61,7 +61,7 @@
 
       <!-- Widget 3: Discipline Top -->
       <div class="bg-white p-5 rounded-xl shadow-sm border border-purple-100 relative overflow-hidden">
-        <h3 class="text-lg font-semibold text-gray-700 mb-3">{{ $t('dashboard.discipline_title') }}</h3>
+        <h3 class="text-lg font-semibold text-gray-700 mb-3">{{ $t('dashboard.discipline_top') }}</h3>
         <div class="space-y-3">
            <div v-for="(user, index) in stats.discipline_top" :key="index" class="flex items-center justify-between p-2 hover:bg-purple-50 rounded-lg transition">
               <div class="flex items-center space-x-3">

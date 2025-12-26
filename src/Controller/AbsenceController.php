@@ -162,4 +162,68 @@ class AbsenceController extends AbstractController
 
         return $this->json($data);
     }
+
+    #[Route('/pending', name: 'api_absence_pending', methods: ['GET'])]
+    public function pendingList(): JsonResponse
+    {
+        $user = $this->getUser();
+        // Check if HR
+        if (!$user instanceof User || !in_array('ROLE_HR', $user->getRoles())) {
+            return $this->json(['error' => 'Access denied'], 403);
+        }
+
+        $repo = $this->entityManager->getRepository(AbsenceRequest::class);
+        $absences = $repo->findBy(['status' => 'pending'], ['date' => 'ASC']);
+
+        $data = [];
+        foreach ($absences as $abs) {
+            $data[] = [
+                'id' => $abs->getId(),
+                'user_name' => $abs->getUser()->getFullName(),
+                'department' => $abs->getUser()->getDepartment(),
+                'date' => $abs->getDate()->format('Y-m-d'),
+                'type' => $abs->getType(),
+                'reason' => $abs->getReason(),
+                'calculated_hours' => $abs->getCalculatedHours(),
+            ];
+        }
+
+        return $this->json($data);
+    }
+
+    #[Route('/{id}/approve', name: 'api_absence_approve', methods: ['POST'])]
+    public function approve(int $id): JsonResponse
+    {
+        $user = $this->getUser();
+        if (!$user instanceof User || !in_array('ROLE_HR', $user->getRoles())) {
+            return $this->json(['error' => 'Access denied'], 403);
+        }
+
+        $absence = $this->entityManager->getRepository(AbsenceRequest::class)->find($id);
+        if (!$absence)
+            return $this->json(['error' => 'Not found'], 404);
+
+        $absence->setStatus('approved');
+        $this->entityManager->flush();
+
+        return $this->json(['success' => true]);
+    }
+
+    #[Route('/{id}/reject', name: 'api_absence_reject', methods: ['POST'])]
+    public function reject(int $id): JsonResponse
+    {
+        $user = $this->getUser();
+        if (!$user instanceof User || !in_array('ROLE_HR', $user->getRoles())) {
+            return $this->json(['error' => 'Access denied'], 403);
+        }
+
+        $absence = $this->entityManager->getRepository(AbsenceRequest::class)->find($id);
+        if (!$absence)
+            return $this->json(['error' => 'Not found'], 404);
+
+        $absence->setStatus('rejected');
+        $this->entityManager->flush();
+
+        return $this->json(['success' => true]);
+    }
 }
