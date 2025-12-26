@@ -1,0 +1,28 @@
+{
+    "login": {
+        "subtitle": "Korporativ boshqaruv tizimi",
+        "phone_label": "Telefon raqami",
+        "password_label": "Parol",
+        "submit_btn": "Kirish",
+        "loading": "Kirish...",
+        "error_phone": "Telefon raqami noto'g'ri formatda"
+    },
+    "common": {
+        "submit": "Yuborish",
+        "sending": "Yuborilmoqda..."
+    },
+    "absence": {
+        "title": "Ishga kelmaslik haqida ariza",
+        "date_label": "Sana",
+        "type_label": "Turi",
+        "type_full_day": "To'liq kun",
+        "type_hours": "Bir necha soat",
+        "time_start": "Dan",
+        "time_end": "Gacha",
+        "step_info": "Qadam 30 daqiqa",
+        "reason_label": "Sabab",
+        "reason_placeholder": "Sababini yozing...",
+        "reason_hint": "Kamida 20 ta belgi",
+        "success_msg": "Ariza muvaffaqiyatli yaratildi!"
+    }
+}

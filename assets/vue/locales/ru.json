@@ -1,0 +1,42 @@
+{
+  "login": {
+    "subtitle": "Корпоративная система управления",
+    "phone_label": "Номер телефона",
+    "password_label": "Пароль",
+    "submit_btn": "Войти",
+    "loading": "Вход...",
+    "error_phone": "Некорректный формат телефона"
+  },
+  "common": {
+    "submit": "Отправить",
+    "sending": "Отправка..."
+  },
+  "absence": {
+    "title": "Заявление на отсутствие",
+    "date_label": "Дата отсутствия",
+    "type_label": "Тип отсутствия",
+    "type_full_day": "Весь день",
+    "type_hours": "Несколько часов",
+    "time_start": "C",
+    "time_end": "До",
+    "step_info": "Шаг 30 мин",
+    "reason_label": "Причина",
+    "reason_placeholder": "Опишите причину отсутствия...",
+    "reason_hint": "Минимум 20 символов",
+    "success_msg": "Заявка успешно создана!"
+  },
+  "nav": {
+    "dashboard": "Главная",
+    "absence_create": "Подать заявку (Отсутствие)",
+    "purchase_create": "Заявка на закупку",
+    "approvals": "Согласования",
+    "logout": "Выйти"
+  },
+  "dashboard": {
+    "absent_title": "Отсутствуют сегодня",
+    "no_absences": "Все на месте",
+    "purchases_title": "Закупки на подпись",
+    "no_purchases": "Нет активных заявок",
+    "discipline_title": "Топ прогулов (часы)"
+  }
+}
