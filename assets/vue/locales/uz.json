@@ -83,6 +83,23 @@
         "loading": "Yuklanmoqda...",
         "error_load": "Ma'lumotlarni yuklashda xatolik"
     },
+    "users": {
+        "title": "Xodimlarni boshqarish",
+        "add_btn": "Qo'shish",
+        "table_name": "F.I.Sh",
+        "table_role": "Rol",
+        "table_dept": "Bo'lim",
+        "table_manager": "Rahbar",
+        "no_data": "Xodimlar topilmadi",
+        "modal_title": "Yangi xodim",
+        "field_name": "F.I.Sh",
+        "field_phone": "Telefon (Login)",
+        "field_role": "Rol",
+        "field_dept": "Bo'lim",
+        "field_manager": "Bevosita rahbar",
+        "manager_hint": "Ro'yxatdan bo'lim boshlig'ini tanlang",
+        "created_success": "Xodim muvaffaqiyatli yaratildi"
+    },
     "common": {
         "submit": "Yuborish",
         "sending": "Yuborilmoqda..."
@@ -94,5 +111,14 @@
         "software": "Dasturiy ta'minot",
         "household": "Xo'jalik mollari",
         "other": "Boshqa"
+    },
+    "departments": {
+        "title": "Bo'limlarni boshqarish",
+        "add_btn": "Bo'lim qo'shish",
+        "field_name": "Bo'lim nomi",
+        "actions": "Amallar",
+        "no_data": "Bo'limlar topilmadi",
+        "new_title": "Yangi bo'lim",
+        "edit_title": "Bo'limni tahrirlash"
     }
 }

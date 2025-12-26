@@ -83,6 +83,23 @@
     "loading": "Загрузка...",
     "error_load": "Ошибка загрузки данных"
   },
+  "users": {
+    "title": "Управление сотрудниками",
+    "add_btn": "Добавить",
+    "table_name": "ФИО",
+    "table_role": "Роль",
+    "table_dept": "Отдел",
+    "table_manager": "Руководитель",
+    "no_data": "Сотрудники не найдены",
+    "modal_title": "Новый сотрудник",
+    "field_name": "ФИО",
+    "field_phone": "Телефон (Логин)",
+    "field_role": "Роль",
+    "field_dept": "Отдел",
+    "field_manager": "Линейный руководитель",
+    "manager_hint": "Выберите руководителя из списка Dept Heads",
+    "created_success": "Сотрудник успешно создан"
+  },
   "common": {
     "submit": "Отправить",
     "sending": "Отправка..."
@@ -94,5 +111,14 @@
     "software": "ПО и Лицензии",
     "household": "Хоз. товары",
     "other": "Другое"
+  },
+  "departments": {
+    "title": "Управление отделами",
+    "add_btn": "Добавить отдел",
+    "field_name": "Название отдела",
+    "actions": "Действия",
+    "no_data": "Отделы не найдены",
+    "new_title": "Новый отдел",
+    "edit_title": "Редактирование отдела"
   }
 }

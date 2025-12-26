@@ -39,8 +39,16 @@
            <i class="fas fa-check-double w-5"></i>
            <span>{{ $t('nav.approvals') }}</span>
         </a>
+        <a v-if="role === 'ROLE_HR' || role === 'ROLE_CEO'" href="#/users" class="block px-4 py-3 rounded-lg hover:bg-gray-800 transition flex items-center space-x-3 text-gray-300">
+           <i class="fas fa-users w-5"></i>
+           <span>{{ $t('users.title') }}</span>
+        </a>
+        <a v-if="role === 'ROLE_HR' || role === 'ROLE_CEO'" href="#/departments" class="block px-4 py-3 rounded-lg hover:bg-gray-800 transition flex items-center space-x-3 text-gray-300">
+           <i class="fas fa-building w-5"></i>
+           <span>{{ $t('departments.title') }}</span>
+        </a>
       </div>
-
+ж
     </nav>
 
     <!-- Language Switcher -->

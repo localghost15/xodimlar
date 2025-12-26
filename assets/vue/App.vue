@@ -37,6 +37,14 @@
                <Approvals />
             </template>
 
+            <template v-if="currentHash === '#/users'">
+               <UserManagement />
+            </template>
+
+            <template v-if="currentHash === '#/departments'">
+               <DepartmentManagement />
+            </template>
+
             <!-- Add other views here -->
          </div>
       </div>
@@ -56,6 +64,8 @@ import PurchaseRequestForm from './components/PurchaseRequestForm.vue';
 import DashboardCEO from './components/DashboardCEO.vue';
 import DashboardCommon from './components/DashboardCommon.vue';
 import Approvals from './components/Approvals.vue';
+import UserManagement from './components/UserManagement.vue';
+import DepartmentManagement from './components/DepartmentManagement.vue';
 
 const authStore = useAuthStore();
 const currentHash = ref(window.location.hash || '#/');
