@@ -10,9 +10,22 @@
     </div>
 
     <!-- TABS -->
-    <div class="flex space-x-4 border-b mb-6" v-if="role === 'ROLE_HR'">
-        <button class="pb-2 border-b-2 font-medium border-indigo-500 text-indigo-600">
-           {{ $t('absence.title') }} (HR)
+    <!-- TABS -->
+    <!-- HR sees Absences, CEO sees Both (switchable), Others see Purchases -->
+    <div class="flex space-x-4 border-b mb-6" v-if="role === 'ROLE_HR' || role === 'ROLE_CEO'">
+        <button 
+            @click="activeTab = 'absence'; fetchData()" 
+            class="pb-2 border-b-2 font-medium transition-colors"
+            :class="activeTab === 'absence' ? 'border-indigo-500 text-indigo-600' : 'border-transparent text-gray-400 hover:text-gray-600'"
+        >
+           {{ $t('absence.title') }}
+        </button>
+        <button 
+            @click="activeTab = 'purchase'; fetchData()" 
+            class="pb-2 border-b-2 font-medium transition-colors"
+            :class="activeTab === 'purchase' ? 'border-indigo-500 text-indigo-600' : 'border-transparent text-gray-400 hover:text-gray-600'"
+        >
+           {{ $t('purchase.title') }}
         </button>
     </div>
     <div class="flex space-x-4 border-b mb-6" v-else>
@@ -54,10 +67,11 @@
                     </td>
                     <td class="px-6 py-4">
                         <!-- Content depends on type -->
-                        <div v-if="role === 'ROLE_HR'">
+                        <div v-if="activeTab === 'absence'">
                             <p class="font-medium text-gray-700">{{ item.date }}</p>
                             <p class="text-xs text-gray-500">{{ item.type === 'full_day' ? $t('absence.type_full_day') : $t('absence.type_hours') }}</p>
                             <p class="text-sm italic mt-1 text-gray-600">"{{ item.reason }}"</p>
+                            <p class="text-xs font-bold text-indigo-600 mt-1" v-if="item.calculated_hours">{{ item.calculated_hours }} h</p>
                         </div>
                         <div v-else>
                             <p class="font-medium text-gray-700">{{ item.title }}</p>
@@ -82,7 +96,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from 'vue';
+import { ref, onMounted, computed, watch } from 'vue';
 import axios from 'axios';
 import { useI18n } from 'vue-i18n';
 import { useAuthStore } from '../stores/auth';
@@ -95,6 +109,9 @@ const loading = ref(false);
 const error = ref(false);
 const errorMessage = ref('');
 
+// Tab management
+const activeTab = ref('purchase'); // Default
+
 const fetchData = async () => {
     loading.value = true;
     error.value = false;
@@ -102,11 +119,10 @@ const fetchData = async () => {
     items.value = [];
     try {
         let url = '';
-        if (role.value === 'ROLE_HR') {
-            url = '/api/v1/absence/pending';
+        if (activeTab.value === 'absence') {
+             url = '/api/v1/absence/pending';
         } else {
-             // Dept Head, Accountant
-            url = '/api/v1/purchase/pending-approvals';
+             url = '/api/v1/purchase/pending-approvals';
         }
         
         const res = await axios.get(url);
@@ -124,7 +140,7 @@ const approve = async (id) => {
     if(!confirm(t('approvals.confirm_approve'))) return;
     try {
         let url = '';
-        if(role.value === 'ROLE_HR') {
+        if(activeTab.value === 'absence') {
              url = `/api/v1/absence/${id}/approve`;
         } else {
              url = `/api/v1/purchase/${id}/approve`;
@@ -140,13 +156,9 @@ const reject = async (id) => {
     if(!confirm(t('approvals.confirm_reject'))) return;
     try {
          let url = '';
-         if(role.value === 'ROLE_HR') {
+         if(activeTab.value === 'absence') {
             url = `/api/v1/absence/${id}/reject`;
          } else {
-            // Purchase rejection logic for Head?
-            // Existing approve method in PurchaseController does not specifically handle rejection via API yet in the snippet I saw?
-            // Actually, I didn't see a reject endpoint in PurchaseController in my last view.
-            // I should double check. If not, I'll just alert 'Not implemented' for Purchase reject for now.
              alert("Purchase Rejection not implemented yet in backend demo");
              return;
          }
@@ -158,6 +170,12 @@ const reject = async (id) => {
 };
 
 onMounted(() => {
+    // Set default tab based on role
+    if (role.value === 'ROLE_HR') {
+        activeTab.value = 'absence';
+    } else {
+        activeTab.value = 'purchase';
+    }
     fetchData();
 });
 </script>

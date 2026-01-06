@@ -100,9 +100,31 @@
         "manager_hint": "Ro'yxatdan bo'lim boshlig'ini tanlang",
         "created_success": "Xodim muvaffaqiyatli yaratildi"
     },
+    "reports": {
+        "title": "Hisobotlar tahlili",
+        "total_requests": "Jami arizalar",
+        "total_hours": "Jami soatlar",
+        "approval_rate": "Tasdiqlash foizi",
+        "pending": "Kutilmoqda",
+        "date_from": "Sana (bosh)",
+        "date_to": "Sana (tug)",
+        "department": "Bo'lim",
+        "status": "Holat",
+        "search": "Xodimni qidirish",
+        "search_ph": "Ism yoki telefon...",
+        "apply": "Qo'llash",
+        "col_employee": "Xodim",
+        "col_dept": "Bo'lim",
+        "col_date": "Sana",
+        "col_type": "Turi",
+        "col_hours": "Soat",
+        "col_status": "Holat",
+        "no_data": "Ma'lumot topilmadi"
+    },
     "common": {
         "submit": "Yuborish",
-        "sending": "Yuborilmoqda..."
+        "sending": "Yuborilmoqda...",
+        "all": "Barchasi"
     },
     "categories": {
         "office_equip": "Ofis texnikasi",

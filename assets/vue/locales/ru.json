@@ -100,9 +100,31 @@
     "manager_hint": "Выберите руководителя из списка Dept Heads",
     "created_success": "Сотрудник успешно создан"
   },
+  "reports": {
+    "title": "Отчеты и Аналитика",
+    "total_requests": "Всего заявок",
+    "total_hours": "Всего часов",
+    "approval_rate": "Уровень одобрения",
+    "pending": "В ожидании",
+    "date_from": "С даты",
+    "date_to": "По дату",
+    "department": "Отдел",
+    "status": "Статус",
+    "search": "Поиск сотрудника",
+    "search_ph": "Имя или телефон...",
+    "apply": "Применить",
+    "col_employee": "Сотрудник",
+    "col_dept": "Отдел",
+    "col_date": "Дата",
+    "col_type": "Тип",
+    "col_hours": "Часы",
+    "col_status": "Статус",
+    "no_data": "Нет данных по выбранным фильтрам"
+  },
   "common": {
     "submit": "Отправить",
-    "sending": "Отправка..."
+    "sending": "Отправка...",
+    "all": "Все"
   },
   "categories": {
     "office_equip": "Офисная техника",

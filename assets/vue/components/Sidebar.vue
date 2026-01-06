@@ -29,7 +29,7 @@
       </a>
 
       <!-- CEO/Head Specific -->
-      <div v-if="role === 'ROLE_CEO' || role === 'ROLE_DEPT_HEAD' || role === 'ROLE_HR'" class="pt-4 pb-2">
+      <div v-if="role === 'ROLE_CEO' || role === 'ROLE_DEPT_HEAD' || role === 'ROLE_HR' || role === 'ROLE_ACCOUNTANT'" class="pt-4 pb-2">
         <p class="px-4 text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">{{ $t('nav.management') }}</p>
         <a v-if="role === 'ROLE_CEO'" href="#/ceo/dashboard" class="block px-4 py-3 rounded-lg hover:bg-gray-800 transition flex items-center space-x-3 text-yellow-500">
            <i class="fas fa-chart-line w-5"></i>
@@ -47,8 +47,12 @@
            <i class="fas fa-building w-5"></i>
            <span>{{ $t('departments.title') }}</span>
         </a>
+        <a v-if="role === 'ROLE_HR' || role === 'ROLE_CEO'" href="#/absence/reports" class="block px-4 py-3 rounded-lg hover:bg-gray-800 transition flex items-center space-x-3 text-gray-300">
+           <i class="fas fa-chart-pie w-5"></i>
+           <span>{{ $t('reports.title') }}</span>
+        </a>
       </div>
-ж
+
     </nav>
 
     <!-- Language Switcher -->

@@ -67,26 +67,43 @@
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('users.field_role') }}</label>
-                    <select v-model="form.role" class="w-full border-gray-300 rounded-lg shadow-sm">
-                        <option value="ROLE_EMPLOYEE">Employee</option>
-                        <option value="ROLE_DEPT_HEAD">Department Head</option>
-                        <option value="ROLE_HR">HR Manager</option>
-                        <option value="ROLE_ACCOUNTANT">Accountant</option>
-                    </select>
+                    <VueMultiselect 
+                        v-model="selectedRole" 
+                        :options="rolesWithOptions"
+                        label="label"
+                        track-by="value"
+                        placeholder="Select Role"
+                    />
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('users.field_dept') }}</label>
-                    <select v-model="form.department_id" class="w-full border-gray-300 rounded-lg shadow-sm">
-                        <option :value="null">- Select -</option>
-                        <option v-for="d in departments" :key="d.id" :value="d.id">{{ d.name }}</option>
-                    </select>
+                    <VueMultiselect
+                        v-model="selectedDept"
+                        :options="departments"
+                        label="name"
+                        track-by="id"
+                        placeholder="Search Department"
+                    />
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('users.field_manager') }}</label>
-                     <select v-model="form.manager_id" class="w-full border-gray-300 rounded-lg shadow-sm">
-                        <option :value="null">- None -</option>
-                        <option v-for="h in heads" :key="h.id" :value="h.id">{{ h.full_name }} ({{ h.department }})</option>
-                    </select>
+                     <VueMultiselect
+                        v-model="selectedManager"
+                        :options="heads"
+                        label="full_name"
+                        track-by="id"
+                        placeholder="Search Manager"
+                     >
+                        <template #singleLabel="{ option }">
+                            <strong>{{ option.full_name }}</strong> <span class="text-gray-500 text-xs">({{ option.department }})</span>
+                        </template>
+                        <template #option="{ option }">
+                             <div class="flex justify-between">
+                                <span>{{ option.full_name }}</span>
+                                <span class="text-gray-400 text-xs">{{ option.department }}</span>
+                             </div>
+                        </template>
+                     </VueMultiselect>
                     <p class="text-xs text-gray-500 mt-1">{{ $t('users.manager_hint') }}</p>
                 </div>
 
@@ -109,14 +126,26 @@
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
 import { useI18n } from 'vue-i18n';
+import VueMultiselect from 'vue-multiselect';
 
-const { t } = useI18n(); // Access translation function
+const { t } = useI18n();
 
 const users = ref([]);
 const heads = ref([]);
 const departments = ref([]);
 const showModal = ref(false);
 const submitting = ref(false);
+
+const rolesWithOptions = [
+    { value: 'ROLE_EMPLOYEE', label: 'Employee' },
+    { value: 'ROLE_DEPT_HEAD', label: 'Department Head' },
+    { value: 'ROLE_HR', label: 'HR Manager' },
+    { value: 'ROLE_ACCOUNTANT', label: 'Accountant' }
+];
+
+const selectedRole = ref(rolesWithOptions[0]);
+const selectedDept = ref(null);
+const selectedManager = ref(null);
 
 const form = ref({
     full_name: '',
@@ -134,6 +163,9 @@ const openModal = () => {
         department_id: null,
         manager_id: null
     };
+    selectedRole.value = rolesWithOptions[0];
+    selectedDept.value = null;
+    selectedManager.value = null;
     showModal.value = true;
 };
 
@@ -157,6 +189,11 @@ const fetchData = async () => {
 };
 
 const createUser = async () => {
+    // Map selected objects to values
+    form.value.role = selectedRole.value ? selectedRole.value.value : 'ROLE_EMPLOYEE';
+    form.value.department_id = selectedDept.value ? selectedDept.value.id : null;
+    form.value.manager_id = selectedManager.value ? selectedManager.value.id : null;
+
     submitting.value = true;
     try {
         await axios.post('/api/v1/users/create', form.value);

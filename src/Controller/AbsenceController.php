@@ -167,8 +167,8 @@ class AbsenceController extends AbstractController
     public function pendingList(): JsonResponse
     {
         $user = $this->getUser();
-        // Check if HR
-        if (!$user instanceof User || !in_array('ROLE_HR', $user->getRoles())) {
+        // Check if HR or CEO
+        if (!$user instanceof User || (!in_array('ROLE_HR', $user->getRoles()) && !in_array('ROLE_CEO', $user->getRoles()))) {
             return $this->json(['error' => 'Access denied'], 403);
         }
 
@@ -180,7 +180,7 @@ class AbsenceController extends AbstractController
             $data[] = [
                 'id' => $abs->getId(),
                 'user_name' => $abs->getUser()->getFullName(),
-                'department' => $abs->getUser()->getDepartment(),
+                'department' => $abs->getUser()->getDepartment() ? $abs->getUser()->getDepartment()->getName() : 'N/A',
                 'date' => $abs->getDate()->format('Y-m-d'),
                 'type' => $abs->getType(),
                 'reason' => $abs->getReason(),
@@ -195,7 +195,7 @@ class AbsenceController extends AbstractController
     public function approve(int $id): JsonResponse
     {
         $user = $this->getUser();
-        if (!$user instanceof User || !in_array('ROLE_HR', $user->getRoles())) {
+        if (!$user instanceof User || (!in_array('ROLE_HR', $user->getRoles()) && !in_array('ROLE_CEO', $user->getRoles()))) {
             return $this->json(['error' => 'Access denied'], 403);
         }
 
@@ -213,7 +213,7 @@ class AbsenceController extends AbstractController
     public function reject(int $id): JsonResponse
     {
         $user = $this->getUser();
-        if (!$user instanceof User || !in_array('ROLE_HR', $user->getRoles())) {
+        if (!$user instanceof User || (!in_array('ROLE_HR', $user->getRoles()) && !in_array('ROLE_CEO', $user->getRoles()))) {
             return $this->json(['error' => 'Access denied'], 403);
         }
 
@@ -225,5 +225,90 @@ class AbsenceController extends AbstractController
         $this->entityManager->flush();
 
         return $this->json(['success' => true]);
+    }
+
+    #[Route('/report', name: 'api_absence_report', methods: ['GET'])]
+    public function report(Request $request): JsonResponse
+    {
+        $user = $this->getUser();
+        if (!$user instanceof User || (!in_array('ROLE_HR', $user->getRoles()) && !in_array('ROLE_CEO', $user->getRoles()))) {
+            return $this->json(['error' => 'Access denied'], 403);
+        }
+
+        $filters = [
+            'date_from' => $request->query->get('date_from'),
+            'date_to' => $request->query->get('date_to'),
+            'department_id' => $request->query->get('department_id'),
+            'status' => $request->query->get('status'),
+            'search' => $request->query->get('search'),
+        ];
+
+        $repo = $this->entityManager->getRepository(AbsenceRequest::class);
+        $absences = $repo->findByFilter($filters);
+
+        $data = [];
+        foreach ($absences as $abs) {
+            $deptName = $abs->getUser()->getDepartment() ? $abs->getUser()->getDepartment()->getName() : 'N/A';
+
+            $data[] = [
+                'id' => $abs->getId(),
+                'user_name' => $abs->getUser()->getFullName(),
+                'department' => $deptName,
+                'date' => $abs->getDate()->format('Y-m-d'),
+                'type' => $abs->getType(),
+                'reason' => $abs->getReason(),
+                'status' => $abs->getStatus() ?? 'pending',
+                'calculated_hours' => $abs->getCalculatedHours(),
+            ];
+        }
+
+        return $this->json($data);
+    }
+
+    #[Route('/statistics', name: 'api_absence_statistics', methods: ['GET'])]
+    public function statistics(Request $request): JsonResponse
+    {
+        $user = $this->getUser();
+        if (!$user instanceof User || (!in_array('ROLE_HR', $user->getRoles()) && !in_array('ROLE_CEO', $user->getRoles()))) {
+            return $this->json(['error' => 'Access denied'], 403);
+        }
+
+        // Reuse filter logic if needed, or get global stats
+        // Check if report filters are passed to sync stats with table
+        $filters = [
+            'date_from' => $request->query->get('date_from'),
+            'date_to' => $request->query->get('date_to'),
+            'department_id' => $request->query->get('department_id'),
+        ];
+
+        $repo = $this->entityManager->getRepository(AbsenceRequest::class);
+        $results = $repo->findByFilter($filters);
+
+        $totalRequests = count($results);
+        $totalHours = 0.0;
+        $statusCounts = ['approved' => 0, 'pending' => 0, 'rejected' => 0];
+
+        foreach ($results as $r) {
+            $hours = (float) $r->getCalculatedHours();
+            $totalHours += $hours;
+
+            $status = $r->getStatus() ?? 'pending';
+            if (isset($statusCounts[$status])) {
+                $statusCounts[$status]++;
+            } else {
+                // handle unknown status safely
+                $statusCounts[$status] = ($statusCounts[$status] ?? 0) + 1;
+            }
+        }
+
+        // Approval rate
+        $approvalRate = $totalRequests > 0 ? round(($statusCounts['approved'] / $totalRequests) * 100) : 0;
+
+        return $this->json([
+            'total_requests' => $totalRequests,
+            'total_hours' => $totalHours,
+            'approval_rate' => $approvalRate,
+            'status_breakdown' => $statusCounts
+        ]);
     }
 }

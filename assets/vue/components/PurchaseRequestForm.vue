@@ -82,12 +82,19 @@
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('purchase.category') }}</label>
-              <select 
-                v-model="form.category" 
-                class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none bg-white"
+              <VueMultiselect 
+                v-model="selectedCategory" 
+                :options="categories"
+                track-by="value"
+                placeholder="Select Category"
               >
-                <option v-for="catKey in categoryKeys" :key="catKey" :value="catKey">{{ $t('categories.' + catKey) }}</option>
-              </select>
+                  <template #singleLabel="{ option }">
+                        {{ $t('categories.' + option.value) }}
+                  </template>
+                  <template #option="{ option }">
+                        {{ $t('categories.' + option.value) }}
+                  </template>
+              </VueMultiselect>
             </div>
             <div>
               <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('purchase.price') }} (UZS)</label>
@@ -154,10 +161,14 @@
 import { ref, reactive, onMounted } from 'vue';
 import { useI18n } from 'vue-i18n';
 import axios from 'axios';
+import VueMultiselect from 'vue-multiselect';
 
 const { t } = useI18n();
 
 const categoryKeys = ['office_equip', 'furniture', 'stationery', 'software', 'household', 'other'];
+const categories = categoryKeys.map(key => ({ value: key })); // We will use a function to get label reactively
+
+const selectedCategory = ref({ value: 'office_equip' });
 
 const form = reactive({
   title: '',
@@ -182,6 +193,9 @@ const fetchHistory = async () => {
 };
 
 const submitForm = async () => {
+  // Sync selected category
+  form.category = selectedCategory.value ? selectedCategory.value.value : 'office_equip';
+
   loading.value = true;
   error.value = null;
 
